@@ -20,7 +20,13 @@ namespace Pong
         [SerializeField]
         private Rigidbody2D _rigidbody;
 
+        [SerializeField]
+        private Vector2 _initialPosition;
+
         public BoxCollider2D _collider;
+
+        public KeyCode UpKey;
+        public KeyCode DownKey;
 
         private void Start()
         {
@@ -33,16 +39,34 @@ namespace Pong
             {
                 _collider = GetComponent<BoxCollider2D>();
             }
+
+            _initialPosition = transform.position;
         }
 
         private void Update()
         {
-            VerticalDirection = Input.GetAxis("Vertical");
+            if(Input.GetKey(UpKey))
+            {
+                VerticalDirection = 1;
+            }
+            else if(Input.GetKey(DownKey))
+            {
+                VerticalDirection = -1;
+            }
+            else
+            {
+                VerticalDirection = 0;
+            }
         }
 
         private void FixedUpdate()
         {
             _rigidbody.position += new Vector2(0, VerticalDirection) * (Speed * Time.fixedDeltaTime);
+        }
+
+        public void ResetPosition()
+        {
+            _rigidbody.position = _initialPosition;
         }
     }
 }
